@@ -1,5 +1,4 @@
 from random import randint, SystemRandom
-import sys
 from containers import Container
 from ships import Ship
 import time
@@ -61,7 +60,6 @@ class DataGenerator:
             for container in self.containers:
                 f.write(str(container))
 
-
 if __name__ == "__main__":
-    a = DataGenerator(5, 100, 10)
-    a.write_to_file("input")
+    a = DataGenerator(5, 200, 10)
+    a.write_to_file("../input")
