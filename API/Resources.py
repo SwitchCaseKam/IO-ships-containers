@@ -15,4 +15,8 @@ class Resources:
         container = Container(id, int(width), int(length), int(height), int(timestamp))
         self.containers.append(container)
 
+    def timestampCompareFunction(self, container):
+        return container.timestamp
 
+    def sortContainersByTimestamp(self):
+        self.containers.sort(key=self.timestampCompareFunction)

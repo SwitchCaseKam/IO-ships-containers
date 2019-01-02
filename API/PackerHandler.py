@@ -2,7 +2,7 @@ from API import Common
 from math import floor
 
 class PackerHandler:
-    heightOfShips = None
+    heightOfContainer = None
     layersOfContainers = []
 
     def __init__(self):
@@ -19,19 +19,32 @@ class PackerHandler:
                 Common.terminateScript("Undefined ID")
         file.close()
 
-    def packContainersToShips(self, resources, packer):
+    def packContainersToShipsOffline(self, resources, packer):
+        self.heightOfContainer = resources.containers[0].height
+
         for container in resources.containers:
             packer.add_rect(container.width, container.length)
 
-        self.heightOfShips = resources.containers[0].height
-
         for ship in resources.ships:
-            layers = floor(ship.height/self.heightOfShips)
+            layers = floor(ship.height / self.heightOfContainer)
             packer.add_bin(ship.width, ship.length, count=layers, bid=int(ship.id[1:]))
             self.layersOfContainers.append(layers)
         packer.pack()
 
+    def packContainersToShipsOnline(self, resources, packer):
+        resources.sortContainersByTimestamp()
+        self.heightOfContainer = resources.containers[0].height
+
+        for ship in resources.ships:
+            layers = floor(ship.height / self.heightOfContainer)
+            packer.add_bin(ship.width, ship.length, count=layers, bid=int(ship.id[1:]))
+            self.layersOfContainers.append(layers)
+
+        for container in resources.containers:
+            packer.add_rect(container.width, container.length)
+
     def executePacker(self, inputFileName, resources, packer):
         self.fillResourcesWithDataFromFile(inputFileName, resources)
-        self.packContainersToShips(resources, packer)
+        self.packContainersToShipsOnline(resources, packer)
+
 

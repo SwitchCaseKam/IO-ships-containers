@@ -1,4 +1,4 @@
-from API.Engine import Engine
+from API.ReportCreator import ReportCreator
 
 '''
 Algorithms:
@@ -9,5 +9,5 @@ Skyline
 '''
 
 if __name__ == "__main__":
-    engine = Engine("input_200", "MaxRects")
-    engine.start()
+    reportCreator = ReportCreator("input", "MaxRects")
+    reportCreator.start()

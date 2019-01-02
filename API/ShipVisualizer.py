@@ -9,6 +9,8 @@ class ShipVisualizer:
     fig_rows = 1
     numOfProcessedLayer = 0
     layersOfContainers = []
+    numberOfPackedContainers = 0
+    numberOfPlotedContainers = 0
 
     def __init__(self, algorithmName):
         self.algorithmName = algorithmName
@@ -21,38 +23,42 @@ class ShipVisualizer:
     def setFigCols(self, id):
         self.fig_cols = self.layersOfContainers[id]
 
-    def saveFigureIfAllLayerProcessed(self, shipId):
-        if self.numOfProcessedLayer == self.fig_cols:
-            self.numOfProcessedLayer = 0
-            pathToImg = "results/" + self.algorithmName + "_Ship" + str(shipId) + ".png"
-            self.fig.savefig(pathToImg, dpi=144, bbox_inches='tight')
-            self.fig = plt.figure(figsize=(15, 15))
+    def setNumberOfPackedContainers(self,packer):
+        self.numberOfPackedContainers = len(packer.rect_list())
 
-    def prepareFigureOfContainersOnSpecificShip(self, layer):
-        self.setFigCols(layer.bid)
+    def saveFigure(self, shipId):
+        self.numOfProcessedLayer = 0
+        pathToImg = "results/" + self.algorithmName + "_Ship" + str(shipId) + ".png"
+        self.fig.savefig(pathToImg, dpi=144, bbox_inches='tight')
+        self.fig = plt.figure(figsize=(15, 15))
+
+    def prepareSubAxis(self, layerId):
+        self.setFigCols(layerId)
         self.numOfProcessedLayer += 1
-        subAxis = self.fig.add_subplot(self.fig_rows, self.fig_cols, self.numOfProcessedLayer, aspect='equal')
+        return self.fig.add_subplot(self.fig_rows, self.fig_cols, self.numOfProcessedLayer, aspect='equal')
 
+    def fillSubAxisWithRectangles(self, layer, subAxis):
         for container in layer:
+            self.numberOfPlotedContainers += 1
             plt.axis([0, layer.width, 0, layer.height])
             subAxis.add_patch(
                 Rectangle((container.x, container.y), container.width, container.height,
-                           facecolor="green", edgecolor="black", linewidth=3))
+                          facecolor="green", edgecolor="black", linewidth=3))
 
         subAxis.set_title("Ship num: " + str(layer.bid) + ", Level " + str(self.numOfProcessedLayer))
-        self.saveFigureIfAllLayerProcessed(layer.bid)
+
+    def prepareFigureOfContainersOnSpecificShip(self, layer):
+        subAxis = self.prepareSubAxis(layer.bid)
+        self.fillSubAxisWithRectangles(layer, subAxis)
+        if (self.numOfProcessedLayer == self.fig_cols) or \
+           (self.numberOfPlotedContainers == self.numberOfPackedContainers):
+            self.saveFigure(layer.bid)
 
     def VisualizeOfAllContainersOnShip(self, packer, layersOfContainers):
         self.setLayersPerShip(packer)
         self.layersOfContainers = layersOfContainers
-        all_rects = packer.rect_list()
-        i = 0
-        for rect in all_rects:
-            i += 1
-        print(i)
+        self.setNumberOfPackedContainers(packer)
         for layer in packer:
             self.prepareFigureOfContainersOnSpecificShip(layer)
-
-
 
 

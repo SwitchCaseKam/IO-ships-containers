@@ -3,14 +3,14 @@ from rectpack.packer import newPacker
 from API.ShipVisualizer import ShipVisualizer
 from API.PackerHandler import PackerHandler
 from API import Common
-from collections import Counter
+from rectpack.packer import PackingMode
 
-class Engine:
+class ReportCreator:
     def __init__(self, _inputFileName , _algorithmName):
         self.resources = Resources()
         self.inputFileName = _inputFileName
         self.algorithmName = _algorithmName
-        self.packer = newPacker(pack_algo = self.getAlgotithmClass())
+        self.packer = newPacker(mode = PackingMode.Online, pack_algo = self.getAlgotithmClass())
         self.packerHandler = PackerHandler()
         self.shipVisualizer = ShipVisualizer(_algorithmName)
 
