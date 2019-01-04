@@ -20,3 +20,9 @@ class Resources:
 
     def sortContainersByTimestamp(self):
         self.containers.sort(key=self.timestampCompareFunction)
+
+    def idCompareFunction(self, container):
+        return container.id[1:]
+
+    def sortContainersById(self):
+        self.containers.sort(key=self.idCompareFunction)

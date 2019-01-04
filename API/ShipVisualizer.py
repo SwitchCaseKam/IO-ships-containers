@@ -8,7 +8,7 @@ class ShipVisualizer:
     fig_cols = 0
     fig_rows = 1
     numOfProcessedLayer = 0
-    layersOfContainers = []
+    layersOfContainers = {}
     numberOfPackedContainers = 0
     numberOfPlotedContainers = 0
 
@@ -28,7 +28,7 @@ class ShipVisualizer:
 
     def saveFigure(self, shipId):
         self.numOfProcessedLayer = 0
-        pathToImg = "results/" + self.algorithmName + "_Ship" + str(shipId) + ".png"
+        pathToImg = "results/" + self.algorithmName + "_" + str(shipId) + ".png"
         self.fig.savefig(pathToImg, dpi=144, bbox_inches='tight')
         self.fig = plt.figure(figsize=(15, 15))
 
@@ -45,7 +45,7 @@ class ShipVisualizer:
                 Rectangle((container.x, container.y), container.width, container.height,
                           facecolor="green", edgecolor="black", linewidth=3))
 
-        subAxis.set_title("Ship num: " + str(layer.bid) + ", Level " + str(self.numOfProcessedLayer))
+        subAxis.set_title("Ship id: " + str(layer.bid) + ", Level " + str(self.numOfProcessedLayer))
 
     def prepareFigureOfContainersOnSpecificShip(self, layer):
         subAxis = self.prepareSubAxis(layer.bid)

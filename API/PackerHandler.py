@@ -3,10 +3,7 @@ from math import floor
 
 class PackerHandler:
     heightOfContainer = None
-    layersOfContainers = []
-
-    def __init__(self):
-        self.layersOfContainers.append(None)
+    layersOfContainers = {}
 
     def fillResourcesWithDataFromFile(self, inputFileName, resources):
         file = open(inputFileName, "r")
@@ -27,8 +24,8 @@ class PackerHandler:
 
         for ship in resources.ships:
             layers = floor(ship.height / self.heightOfContainer)
-            packer.add_bin(ship.width, ship.length, count=layers, bid=int(ship.id[1:]))
-            self.layersOfContainers.append(layers)
+            packer.add_bin(ship.width, ship.length, count=layers, bid=ship.id)
+            self.layersOfContainers[ship.id] = layers
         packer.pack()
 
     def packContainersToShipsOnline(self, resources, packer):
@@ -37,14 +34,13 @@ class PackerHandler:
 
         for ship in resources.ships:
             layers = floor(ship.height / self.heightOfContainer)
-            packer.add_bin(ship.width, ship.length, count=layers, bid=int(ship.id[1:]))
-            self.layersOfContainers.append(layers)
+            packer.add_bin(ship.width, ship.length, count=layers, bid=ship.id)
+            self.layersOfContainers[ship.id] = layers
 
         for container in resources.containers:
-            packer.add_rect(container.width, container.length)
+            packer.add_rect(container.width, container.length, rid=container.id)
+
 
     def executePacker(self, inputFileName, resources, packer):
         self.fillResourcesWithDataFromFile(inputFileName, resources)
         self.packContainersToShipsOnline(resources, packer)
-
-
