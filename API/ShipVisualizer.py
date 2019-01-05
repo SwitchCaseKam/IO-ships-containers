@@ -46,7 +46,7 @@ class ShipVisualizer:
                 Rectangle((container.x, container.y), container.width, container.height,
                           facecolor="green", edgecolor="black", linewidth=3))
             #TO DO - add container ID
-            subAxis.annotate("ContainerID", (container.x, container.y), color='w', weight='bold',
+            subAxis.annotate("ContainerID", (container.x+container.width/2, container.y+container.height/2), color='w', weight='bold',
                         fontsize=6, ha='center', va='center')
 
         subAxis.set_title("Ship id: " + str(layer.bid) + ", Level " + str(self.numOfProcessedLayer))
