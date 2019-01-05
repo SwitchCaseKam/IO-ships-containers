@@ -18,6 +18,7 @@ class ReportCreator:
         self.shipVisualizer = ShipVisualizer(_algorithmName)
         self.surfacesOfShips = {}
         self.surfacesOfContainersOnShip = {}
+        self.numberOfContainersInEachShip = {}
 
     def getAlgotithmClass(self):
         if self.algorithmName == "Guillotine":
@@ -33,15 +34,18 @@ class ReportCreator:
             Common.terminateScript("Undefined algorithm")
 
     def saveUnusedResourcesToFile(self):
+
         percentageOfFilledSurface = self.calculatePercentageOfFilledSurface()
         print(percentageOfFilledSurface)
         idOfFullShip = []
         idOfNotFullShips = []
+
         for key, val in percentageOfFilledSurface.items():
-            if val > 0.75:
+            if val > 0.60:
                 idOfFullShip.append(key)
             else:
                 idOfNotFullShips.append(key)
+
         self.deletePreparedShipToSetOff(idOfFullShip)
         self.deletePackedContainersFromResources(idOfNotFullShips)
 
@@ -59,6 +63,25 @@ class ReportCreator:
 
         file.close()
 
+        if os.path.exists("summary.txt"):
+            os.remove("summary.txt")
+
+        file = open("summmary.txt", "w")
+        file.write("SHIP PACKER REPORT\n")
+        file.write("\n")
+        file.write("Initial resources:\n")
+        file.write("Amount of ships: " + str(len(percentageOfFilledSurface)) + "\n")
+        file.write("Amount of containers: " + str(self.packerHandler.amountOfContainersInResources) + "\n")
+        file.write("\n")
+        file.write("\n")
+        file.write("Results: \n")
+        file.write("\n")
+        file.write("Number of ships ready to set off: " + str(len(idOfFullShip)) + "\n")
+        file.write("Number of packed containers: " + str(self.packerHandler.amountOfContainersInResources-len(self.resources.containers)) + "\n")
+        file.write("\n")
+        file.write("Number of left ships: " + str(len(self.resources.ships)) + "\n")
+        file.write("Number of left containers: " + str(len(self.resources.containers)) + "\n")
+        file.close()
 
     def calculateSurfaceOfLayerMadeByContainers(self, layer):
         containersSurfaceOnLayer = 0
@@ -74,8 +97,10 @@ class ReportCreator:
     def totalSurfaceOfAllPackedContainers(self):
         for ship in self.resources.ships:
             self.surfacesOfContainersOnShip[ship.id] = 0
+            self.numberOfContainersInEachShip[ship.id] = 0
         for layer in self.packer:
             self.surfacesOfContainersOnShip[layer.bid] += self.calculateSurfaceOfLayerMadeByContainers(layer)
+            self.numberOfContainersInEachShip[layer.bid] += 1
 
     def calculatePercentageOfFilledSurface(self):
         self.heightOfContainer = self.packerHandler.heightOfContainer

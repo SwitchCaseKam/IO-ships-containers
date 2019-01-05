@@ -4,6 +4,8 @@ from math import floor
 class PackerHandler:
     heightOfContainer = None
     layersOfContainers = {}
+    amountOfContainersInPacker = 0
+    amountOfContainersInResources = 0
 
     def fillResourcesWithDataFromFile(self, inputFileName, resources):
         file = open(inputFileName, "r")
@@ -28,6 +30,9 @@ class PackerHandler:
             self.layersOfContainers[ship.id] = layers
         packer.pack()
 
+        self.amountOfContainersInPacker = len(packer.rect_list())
+        self.amountOfContainersInResources = len(resources.containers)
+
     def packContainersToShipsOnline(self, resources, packer):
         resources.sortContainersByTimestamp()
         self.heightOfContainer = resources.containers[0].height
@@ -40,6 +45,8 @@ class PackerHandler:
         for container in resources.containers:
             packer.add_rect(container.width, container.length, rid=container.id)
 
+        self.amountOfContainersInPacker = len(packer.rect_list())
+        self.amountOfContainersInResources = len(resources.containers)
 
     def executePacker(self, inputFileName, resources, packer):
         self.fillResourcesWithDataFromFile(inputFileName, resources)
