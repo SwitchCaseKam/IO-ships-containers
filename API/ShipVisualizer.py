@@ -41,9 +41,13 @@ class ShipVisualizer:
         for container in layer:
             self.numberOfPlotedContainers += 1
             plt.axis([0, layer.width, 0, layer.height])
+
             subAxis.add_patch(
                 Rectangle((container.x, container.y), container.width, container.height,
                           facecolor="green", edgecolor="black", linewidth=3))
+            #TO DO - add container ID
+            subAxis.annotate("ContainerID", (container.x, container.y), color='w', weight='bold',
+                        fontsize=6, ha='center', va='center')
 
         subAxis.set_title("Ship id: " + str(layer.bid) + ", Level " + str(self.numOfProcessedLayer))
 
@@ -60,5 +64,6 @@ class ShipVisualizer:
         self.setNumberOfPackedContainers(packer)
         for layer in packer:
             self.prepareFigureOfContainersOnSpecificShip(layer)
+
 
 
