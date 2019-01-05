@@ -1,7 +1,7 @@
 import os
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-from collections import Counter
+from collections import Counter, defaultdict
 
 class ShipVisualizer:
     fig = plt.figure(figsize=(15, 15))
@@ -11,6 +11,7 @@ class ShipVisualizer:
     layersOfContainers = {}
     numberOfPackedContainers = 0
     numberOfPlotedContainers = 0
+    containersPerShip=defaultdict(list)
 
     def __init__(self, algorithmName):
         self.algorithmName = algorithmName
@@ -45,11 +46,12 @@ class ShipVisualizer:
             subAxis.add_patch(
                 Rectangle((container.x, container.y), container.width, container.height,
                           facecolor="green", edgecolor="black", linewidth=3))
-            #TO DO - add container ID
-            subAxis.annotate("ContainerID", (container.x+container.width/2, container.y+container.height/2), color='w', weight='bold',
+            subAxis.annotate(container.rid, (container.x+container.width/2, container.y+container.height/2), color='w', weight='bold',
                         fontsize=6, ha='center', va='center')
+            self.containersPerShip[layer.bid].append(str(container.rid))
 
         subAxis.set_title("Ship id: " + str(layer.bid) + ", Level " + str(self.numOfProcessedLayer))
+
 
     def prepareFigureOfContainersOnSpecificShip(self, layer):
         subAxis = self.prepareSubAxis(layer.bid)
@@ -58,12 +60,21 @@ class ShipVisualizer:
            (self.numberOfPlotedContainers == self.numberOfPackedContainers):
             self.saveFigure(layer.bid)
 
+    def prepareContainersToShipsReport(self):
+        with open("results/overall_report", 'w') as overallReport:
+            overallReport.write("*** OVERALL REPORT *** \n\n")
+            for ship in self.containersPerShip:
+                overallReport.write("Containers to ship: " + str(ship)+"\n")
+                for container in self.containersPerShip[ship]:
+                    overallReport.write(container+"\n")
+                overallReport.write("\n")
+
     def VisualizeOfAllContainersOnShip(self, packer, layersOfContainers):
         self.setLayersPerShip(packer)
         self.layersOfContainers = layersOfContainers
         self.setNumberOfPackedContainers(packer)
         for layer in packer:
             self.prepareFigureOfContainersOnSpecificShip(layer)
-
+        self.prepareContainersToShipsReport()
 
 
