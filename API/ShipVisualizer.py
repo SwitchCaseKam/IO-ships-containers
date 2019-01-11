@@ -52,7 +52,6 @@ class ShipVisualizer:
 
         subAxis.set_title("Ship id: " + str(layer.bid) + ", Level " + str(self.numOfProcessedLayer))
 
-
     def prepareFigureOfContainersOnSpecificShip(self, layer):
         subAxis = self.prepareSubAxis(layer.bid)
         self.fillSubAxisWithRectangles(layer, subAxis)
@@ -60,21 +59,9 @@ class ShipVisualizer:
            (self.numberOfPlotedContainers == self.numberOfPackedContainers):
             self.saveFigure(layer.bid)
 
-    def prepareContainersToShipsReport(self):
-        with open("results/overall_report", 'w') as overallReport:
-            overallReport.write("*** OVERALL REPORT *** \n\n")
-            for ship in self.containersPerShip:
-                overallReport.write("Containers to ship: " + str(ship)+"\n")
-                for container in self.containersPerShip[ship]:
-                    overallReport.write(container+"\n")
-                overallReport.write("\n")
-
     def VisualizeOfAllContainersOnShip(self, packer, layersOfContainers):
         self.setLayersPerShip(packer)
         self.layersOfContainers = layersOfContainers
         self.setNumberOfPackedContainers(packer)
         for layer in packer:
             self.prepareFigureOfContainersOnSpecificShip(layer)
-        self.prepareContainersToShipsReport()
-
-
