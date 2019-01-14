@@ -7,8 +7,8 @@ Amount of containers: 55
 
 Results: 
 
-Number of ships ready to set off: 2
-Number of packed containers: 50
+Number of ships ready to set off: 3
+Number of packed containers: 55
 
-Number of left ships: 3
-Number of left containers: 5
+Number of left ships: 2
+Number of left containers: 0

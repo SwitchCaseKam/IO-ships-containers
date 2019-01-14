@@ -17,14 +17,30 @@ class ReportCreator:
 
     def getAlgotithmClass(self):
         if self.algorithmName == "Guillotine":
+            """
+            Implements Best Short Side Fit (BSSF) section selection criteria for 
+            Guillotine algorithm.
+            Implements Max Area Axis Split (MAXAS) selection rule for Guillotine
+            algorithm. Maximize the larger area == minimize the smaller area.
+            Tries to make the rectangles more even-sized.
+            """
             from rectpack import GuillotineBssfMaxas
             return GuillotineBssfMaxas
+
         elif self.algorithmName == "MaxRects":
+            """Best Sort Side Fit minimize short leftover side"""
             from rectpack import MaxRectsBssf
             return MaxRectsBssf
+
         elif self.algorithmName == "Skyline":
+            """
+            Implements Min Waste fit with low profile heuritic, minimizing the area
+            wasted below the rectangle, at the same time it tries to keep the height
+            minimal.
+            """
             from rectpack import SkylineMwfl
             return SkylineMwfl
+
         else:
             Common.terminateScript("Undefined algorithm")
 

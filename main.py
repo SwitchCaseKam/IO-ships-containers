@@ -9,5 +9,5 @@ Skyline
 '''
 
 if __name__ == "__main__":
-    reportCreator = ReportCreator("input", "Guillotine")
+    reportCreator = ReportCreator("input", "Skyline")
     reportCreator.start()
