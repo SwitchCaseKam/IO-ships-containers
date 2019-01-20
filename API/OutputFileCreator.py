@@ -15,7 +15,7 @@ class OutputFileCreator:
         print(self.percentageOfFilledSurface)
         self.containersPerShip = containersPerShip
 
-    def calculatePercentageOfFilledSurface(self):
+    def calculatePercentageOfFilledSurface(self):           # calculate percentage fill of the surface of the ship
         self.heightOfContainer = self.packerHandler.heightOfContainer
         self.totalSurfaceOfAllLayersInShip()
         self.totalSurfaceOfAllPackedContainers()
@@ -42,12 +42,12 @@ class OutputFileCreator:
             containersSurfaceOnLayer += container.width * container.height
         return containersSurfaceOnLayer
 
-    def totalSurfaceOfAllLayersInShip(self):
+    def totalSurfaceOfAllLayersInShip(self):                # calculate all possible surface in current ship
         for ship in self.resources.ships:
-            layers = floor(ship.height / self.heightOfContainer)
+            layers = floor(ship.height / self.heightOfContainer)        # count layers number
             self.surfacesOfShips[ship.id] = layers * ship.width * ship.length
 
-    def totalSurfaceOfAllPackedContainers(self):
+    def totalSurfaceOfAllPackedContainers(self):            # calculate surface of all packed containers in current ship
         for ship in self.resources.ships:
             self.surfacesOfContainersOnShip[ship.id] = 0
             self.numberOfContainersInEachShip[ship.id] = 0

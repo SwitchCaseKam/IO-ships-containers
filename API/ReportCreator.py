@@ -15,7 +15,7 @@ class ReportCreator:
         self.packerHandler = PackerHandler()
         self.shipVisualizer = ShipVisualizer(_algorithmName)
 
-    def getAlgotithmClass(self):
+    def getAlgotithmClass(self):                 # select packing algorithm
         if self.algorithmName == "Guillotine":
             """
             Implements Best Short Side Fit (BSSF) section selection criteria for 

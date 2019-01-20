@@ -27,7 +27,7 @@ class ShipVisualizer:
     def setNumberOfPackedContainers(self,packer):
         self.numberOfPackedContainers = len(packer.rect_list())
 
-    def saveFigure(self, shipId):
+    def saveFigure(self, shipId):               # save file .png with location of containers in ships
         self.numOfProcessedLayer = 0
         pathToImg = "results/" + self.algorithmName + "_" + str(shipId) + ".png"
         self.fig.savefig(pathToImg, dpi=144, bbox_inches='tight')
@@ -44,22 +44,22 @@ class ShipVisualizer:
             plt.axis([0, layer.width, 0, layer.height])
 
             subAxis.add_patch(
-                Rectangle((container.x, container.y), container.width, container.height,
+                Rectangle((container.x, container.y), container.width, container.height,            # create rectangle in the .png file
                           facecolor="green", edgecolor="black", linewidth=3))
-            subAxis.annotate(container.rid, (container.x+container.width/2, container.y+container.height/2), color='w', weight='bold',
+            subAxis.annotate(container.rid, (container.x+container.width/2, container.y+container.height/2), color='w', weight='bold',          # create label at rectangle
                         fontsize=6, ha='center', va='center')
             self.containersPerShip[layer.bid].append(str(container.rid))
 
-        subAxis.set_title("Ship id: " + str(layer.bid) + ", Level " + str(self.numOfProcessedLayer))
+        subAxis.set_title("Ship id: " + str(layer.bid) + ", Level " + str(self.numOfProcessedLayer))        # title of picture with rectangles
 
-    def prepareFigureOfContainersOnSpecificShip(self, layer):
+    def prepareFigureOfContainersOnSpecificShip(self, layer):           # create list with containers assign to ships
         subAxis = self.prepareSubAxis(layer.bid)
         self.fillSubAxisWithRectangles(layer, subAxis)
         if (self.numOfProcessedLayer == self.fig_cols) or \
            (self.numberOfPlotedContainers == self.numberOfPackedContainers):
             self.saveFigure(layer.bid)
 
-    def VisualizeOfAllContainersOnShip(self, packer, layersOfContainers):
+    def VisualizeOfAllContainersOnShip(self, packer, layersOfContainers):       # executable function of class ShipVisualizer
         self.setLayersPerShip(packer)
         self.layersOfContainers = layersOfContainers
         self.setNumberOfPackedContainers(packer)
