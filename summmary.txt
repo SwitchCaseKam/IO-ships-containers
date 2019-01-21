@@ -2,13 +2,13 @@ SHIP PACKER REPORT
 
 Initial resources:
 Amount of ships: 5
-Amount of containers: 55
+Amount of containers: 200
 
 
 Results: 
 
-Number of ships ready to set off: 3
-Number of packed containers: 55
+Number of ships ready to set off: 5
+Number of packed containers: 151
 
-Number of left ships: 2
-Number of left containers: 0
+Number of left ships: 0
+Number of left containers: 49

@@ -23,7 +23,7 @@ class OutputFileCreator:
                   for key in set(self.surfacesOfContainersOnShip) | set(self.surfacesOfShips)}
         return result
 
-    def deletePackedContainersFromResources(self, idOfNotFullShips):
+    def deletePackedContainersFromResources(self, idOfNotFullShips):    # delete containers from resurces, that are packed in ship
         for layer in self.packer:
             if layer.bid in idOfNotFullShips:
                 continue
@@ -31,12 +31,12 @@ class OutputFileCreator:
                 self.resources.containers = \
                     [cont for cont in self.resources.containers if cont.id != container.rid]
 
-    def deletePreparedShipToSetOff(self, idsOfShipsReadyToSetOff):
+    def deletePreparedShipToSetOff(self, idsOfShipsReadyToSetOff):      # delete ships which are packed
         for id in idsOfShipsReadyToSetOff:
             self.resources.ships = [ship for ship in self.resources.ships if ship.id != id]
 
 
-    def calculateSurfaceOfLayerMadeByContainers(self, layer):
+    def calculateSurfaceOfLayerMadeByContainers(self, layer):       # return sum of container surfaces on each level
         containersSurfaceOnLayer = 0
         for container in layer:
             containersSurfaceOnLayer += container.width * container.height
@@ -55,7 +55,7 @@ class OutputFileCreator:
             self.surfacesOfContainersOnShip[layer.bid] += self.calculateSurfaceOfLayerMadeByContainers(layer)
             self.numberOfContainersInEachShip[layer.bid] += 1
 
-    def createContainersWithIdOfFullAndNotFullShips(self):
+    def createContainersWithIdOfFullAndNotFullShips(self): # returns two list. First contains id of ships ready to set off, second which are not
         idsOfFullShips = []
         idsOfNotFullShips = []
         for key, val in self.percentageOfFilledSurface.items():
@@ -66,12 +66,12 @@ class OutputFileCreator:
         self.numOfFullShips = len(idsOfFullShips)
         return idsOfFullShips, idsOfNotFullShips
 
-    def removeUsedResources(self):
+    def removeUsedResources(self):      # remove used ships and containers
         fullShips, notFullShips = self.createContainersWithIdOfFullAndNotFullShips()
         self.deletePreparedShipToSetOff(fullShips)
         self.deletePackedContainersFromResources(notFullShips)
 
-    def saveResourcesLegacy(self):
+    def saveResourcesLegacy(self):          # save all containers and ships that left in harbour
         if os.path.exists("resourcesLegacy.txt"):
             os.remove("resourcesLegacy.txt")
 
@@ -86,7 +86,7 @@ class OutputFileCreator:
 
         file.close()
 
-    def saveSummary(self):
+    def saveSummary(self):      # save summary report
         if os.path.exists("summary.txt"):
             os.remove("summary.txt")
 
@@ -109,7 +109,7 @@ class OutputFileCreator:
 
         file.close()
 
-    def saveContainersOnFullShipReport(self):
+    def saveContainersOnFullShipReport(self):   # save report with containers in each ship
         with open("containersOnFullShips", 'w') as overallReport:
             overallReport.write("*** OVERALL REPORT *** \n\n")
             for ship in self.containersPerShip:
@@ -118,7 +118,7 @@ class OutputFileCreator:
                     overallReport.write(container+"\n")
                 overallReport.write("\n")
 
-    def saveRaport(self):
+    def saveRaport(self):       # save all reports
         self.removeUsedResources()
         self.saveResourcesLegacy()
         self.saveSummary()

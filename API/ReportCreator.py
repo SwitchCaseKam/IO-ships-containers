@@ -6,8 +6,14 @@ from API import Common
 from rectpack.packer import PackingMode
 from API.OutputFileCreator import OutputFileCreator
 
+'''
+Script is responsible for creating raports.
+'''
+
+
+
 class ReportCreator:
-    def __init__(self, _inputFileName , _algorithmName):
+    def __init__(self, _inputFileName , _algorithmName): # init bacis structures
         self.resources = Resources()
         self.inputFileName = _inputFileName
         self.algorithmName = _algorithmName
@@ -46,7 +52,7 @@ class ReportCreator:
 
 
     def start(self):
-        self.packerHandler.executePacker(self.inputFileName, self.resources, self.packer)
-        self.shipVisualizer.VisualizeOfAllContainersOnShip(self.packer, self.packerHandler.layersOfContainers)
+        self.packerHandler.executePacker(self.inputFileName, self.resources, self.packer)   # handling packer object
+        self.shipVisualizer.VisualizeOfAllContainersOnShip(self.packer, self.packerHandler.layersOfContainers) # visualize results
         outputFileCreator = OutputFileCreator(self.resources, self.packer, self.packerHandler, self.shipVisualizer.containersPerShip)
         outputFileCreator.saveRaport()
